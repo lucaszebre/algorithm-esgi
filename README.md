@@ -13,7 +13,7 @@ The full assignment is in [`Sujet.pdf`](./Sujet.pdf).
 | Lucas  | [@lucaszebre](https://github.com/lucaszebre) |
 | Sorya  | [@Paulineente](https://github.com/Paulineente) |
 
-Work is tracked in issues on the [project board](https://github.com/lucaszebre/algorithm-esgi/projects).
+Work is tracked in issues on the [project board](https://github.com/users/lucaszebre/projects/13).
 
 ## Pages
 
