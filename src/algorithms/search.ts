@@ -3,7 +3,11 @@
  */
 import type { Comparator } from '../types';
 
-/** Returns every item matching `predicate`, scanning the array once. */
+/**
+ * Returns every item matching `predicate`, scanning the array once.
+ *
+ * Time complexity: O(n), where n is the array length.
+ */
 export function linearSearch<T>(
   items: readonly T[],
   predicate: (item: T) => boolean,
@@ -20,8 +24,18 @@ export function linearSearch<T>(
 }
 
 /**
- * Returns the index of `target` in `sortedItems`, or -1. The array must
- * already be sorted with the same `compare`.
+ * Returns the index of `target` in `sortedItems`, or -1.
+ *
+ * Precondition: the array must already be sorted using the same
+ * comparator passed to this function.
+ *
+ * Time complexity: O(log n), where n is the array length.
+ *
+ * Example: sort the product list before searching by id:
+ *
+ * const compareById = (a: Product, b: Product) => a.id - b.id;
+ * const sortedProducts = mergeSort(products, compareById);
+ * const index = binarySearch(sortedProducts, products[0], compareById);
  */
 export function binarySearch<T>(
   sortedItems: readonly T[],
