@@ -172,4 +172,16 @@ describe('mount', () => {
     mount(h('h1', null, 'Products'), container as unknown as Element);
     assert.equal(toHTML(container), '<div><h1>Products</h1></div>');
   });
+  it('updates the existing DOM node without replacing it', () => {
+    const container = new FakeElement('div');
+
+    mount(h('h1', null, 'Home'), container as unknown as Element);
+
+    const originalNode = container.childNodes[0];
+
+    mount(h('h1', null, 'Products'), container as unknown as Element);
+
+    assert.equal(container.childNodes[0], originalNode);
+    assert.equal(toHTML(container), '<div><h1>Products</h1></div>');
+  });
 });
