@@ -9,6 +9,7 @@
  * the props of an existing element the same way.
  */
 import type { EventHandler, Props, PropValue, VNode } from '../types';
+import { diff, patch } from '../algorithms/diff.ts';
 
 /**
  * Props that must be set as DOM properties rather than attributes: the
@@ -92,7 +93,30 @@ export function render(vnode: VNode): Node {
   return el;
 }
 
-/** Renders `vnode` inside `container`, replacing its content. */
+/** Stores the previous virtual tree for each mounted container. */
+const mountedTrees = new WeakMap<Element, VNode>();
+
+/** Renders or updates `vnode` inside `container`. */
 export function mount(vnode: VNode, container: Element): void {
-  container.replaceChildren(render(vnode));
+  const previousVNode = mountedTrees.get(container);
+
+  if (!previousVNode) {
+    container.replaceChildren(render(vnode));
+  } else {
+    const patches = diff(previousVNode, vnode);
+
+    if (patches.length > 0) {
+      if (patches.some((item) => item.type === 'REPLACE' && item.path.length === 0)) {
+        container.replaceChildren(render(vnode));
+      } else {
+        const root = container.childNodes[0];
+
+        if (root) {
+          patch(root, patches);
+        }
+      }
+    }
+  }
+
+  mountedTrees.set(container, vnode);
 }

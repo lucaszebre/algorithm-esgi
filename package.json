@@ -13,6 +13,7 @@
     "test:raw": "node --test \"tests/**/*.test.ts\""
   },
   "devDependencies": {
+    "@types/node": "^26.6.11",
     "typescript": "~6.0.3",
     "vite": "^8.3.4"
   }

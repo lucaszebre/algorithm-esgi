@@ -17,6 +17,9 @@ export class FakeText extends EventTarget {
   get textContent(): string {
     return this.data;
   }
+  set textContent(value: string) {
+    this.data = value;
+  }
 }
 
 export class FakeElement extends EventTarget {
@@ -50,6 +53,55 @@ export class FakeElement extends EventTarget {
     child.parentNode = this;
     this.childNodes.push(child);
     return child;
+  }
+  replaceChild<T extends FakeElement | FakeText>(
+    newChild: T,
+    oldChild: FakeElement | FakeText,
+  ): FakeElement | FakeText {
+    const index = this.childNodes.indexOf(oldChild);
+
+    if (index === -1) {
+      throw new Error('Child not found');
+    }
+
+    oldChild.parentNode = null;
+    newChild.parentNode = this;
+    this.childNodes[index] = newChild;
+
+    return oldChild;
+  }
+
+  removeChild<T extends FakeElement | FakeText>(child: T): T {
+    const index = this.childNodes.indexOf(child);
+
+    if (index === -1) {
+      throw new Error('Child not found');
+    }
+
+    this.childNodes.splice(index, 1);
+    child.parentNode = null;
+
+    return child;
+  }
+
+  insertBefore<T extends FakeElement | FakeText>(
+    newChild: T,
+    referenceChild: FakeElement | FakeText | null,
+  ): T {
+    if (referenceChild === null) {
+      return this.appendChild(newChild);
+    }
+
+    const index = this.childNodes.indexOf(referenceChild);
+
+    if (index === -1) {
+      throw new Error('Reference child not found');
+    }
+
+    newChild.parentNode = this;
+    this.childNodes.splice(index, 0, newChild);
+
+    return newChild;
   }
   replaceChildren(...nodes: (FakeElement | FakeText)[]): void {
     for (const old of this.childNodes) old.parentNode = null;
